@@ -20,6 +20,7 @@
             line-height: 1.5;
             padding-bottom: 80px;
             margin: 0;
+            overflow-x: hidden;
         }
         /* Header compacto */
         .header {
@@ -27,22 +28,23 @@
             padding: 12px 20px 12px 20px;
             text-align: center;
             border-bottom: 3px solid #D31224;
+            position: relative;
+            overflow-x: visible;
         }
         .logo {
             max-width: 160px;
             height: auto;
             margin-bottom: 4px;
         }
-        /* Contenedor del título con emoji lateral sin afectar centrado */
+        /* Contenedor del título con centrado perfecto y emoji absoluto */
         .titulo-wrapper {
             position: relative;
             display: flex;
             justify-content: center;
-            align-items: center;
-            margin: 0;
+            margin: 0 auto;
+            padding: 0 40px; /* Espacio para que el emoji no se corte sin generar scroll */
         }
         .titulo-principal {
-            display: inline-block;
             text-align: center;
         }
         .linea-fpt {
@@ -61,25 +63,28 @@
             letter-spacing: -0.5px;
             line-height: 1.2;
         }
-        /* Emoji lateral (absoluto a la derecha, sin ocupar espacio en el flujo) */
+        /* Emoji posicionado absolutamente a la derecha, sin afectar el centrado, sin scroll */
         .emoji-lateral {
             position: absolute;
-            right: -40px;   /* se sale del contenedor pero sin romper el centrado */
+            right: 0;
             top: 50%;
             transform: translateY(-50%);
             font-size: 2.2rem;
             color: initial;
-            pointer-events: none; /* para que no interfiera con clics */
+            pointer-events: none;
+            white-space: nowrap;
         }
-        /* Ajuste para móviles: si la pantalla es muy pequeña, movemos el emoji abajo */
+        /* En móviles muy pequeños (ancho < 480px), movemos el emoji debajo del texto para evitar superposición */
         @media (max-width: 480px) {
             .titulo-wrapper {
                 flex-direction: column;
+                padding: 0;
             }
             .emoji-lateral {
                 position: static;
                 transform: none;
                 margin-top: 6px;
+                pointer-events: auto;
             }
         }
         .slogan {
@@ -249,7 +254,7 @@
             color: #A66F6F;
         }
 
-        /* ASISTENTE MODAL (sin cambios visuales importantes) */
+        /* ASISTENTE MODAL */
         .asistente-overlay {
             position: fixed;
             top: 0;
@@ -373,7 +378,7 @@
     <span>¿Preferís hablarnos directamente?</span>
 </a>
 
-<!-- ASISTENTE MODAL (mismo código funcional de antes) -->
+<!-- ASISTENTE MODAL (mismo código funcional) -->
 <div id="asistenteModal" class="asistente-overlay">
     <div class="asistente-card">
         <span class="close-asistente" id="closeAsistente">&times;</span>
@@ -443,6 +448,18 @@
     // ========== CONFIGURACIÓN ==========
     // REEMPLAZA ESTA URL CON LA DE TU APPS SCRIPT
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzIuYDBkJIMEKJRstaeeDTtb8iQpxgcl1HmtoBISAwPkxnwyAr_LPPETGaxbi6de5iU/exec";
+
+    // ========== FUNCIÓN PARA FORMATEAR TEXTO (doble espacio = salto de párrafo) ==========
+    function formatText(text) {
+        if (!text) return "";
+        // Convertir punto seguido de espacio en punto + doble salto
+        text = text.replace(/\. /g, '.<br><br>');
+        // Convertir dos espacios seguidos en doble salto (punto y aparte)
+        text = text.replace(/  /g, '<br><br>');
+        // Convertir saltos de línea simples también (por si acaso)
+        text = text.replace(/\n/g, '<br>');
+        return text;
+    }
 
     // ========== ASISTENTE (paso a paso) ==========
     const modal = document.getElementById('asistenteModal');
@@ -553,7 +570,7 @@
     cerrarBtn.onclick = () => { modal.classList.remove('active'); reiniciarAsistente(); };
     modal.onclick = (e) => { if (e.target === modal) modal.classList.remove('active'); };
 
-    // ========== MURO CON RESPUESTAS OCULTAS Y ANIMACIÓN ==========
+    // ========== MURO CON RESPUESTAS OCULTAS Y FORMATO DE TEXTO ==========
     function toggleRespuesta(idx, forceClose = false) {
         const respuestaDiv = document.getElementById(`respuesta-${idx}`);
         const btnVer = document.getElementById(`btnVer-${idx}`);
@@ -589,11 +606,14 @@
             }
             let html = '';
             preguntas.forEach((p, idx) => {
+                // Aplicar formato a la pregunta y a la respuesta
+                const preguntaFormateada = formatText(escapeHtml(p.pregunta));
+                const respuestaFormateada = formatText(escapeHtml(p.respuesta));
                 html += `
                     <div class="pregunta-item" id="pregunta-${idx}">
                         <button class="pregunta-boton" onclick="toggleRespuesta(${idx})">
                             <span class="pregunta-icono">❓</span>
-                            <div class="pregunta-texto">${escapeHtml(p.pregunta)}</div>
+                            <div class="pregunta-texto">${preguntaFormateada}</div>
                         </button>
                         <div class="pregunta-meta">
                             ${p.destinatario ? `Dirigida a: ${escapeHtml(p.destinatario)} · ` : ''}
@@ -604,7 +624,7 @@
                         <div id="respuesta-${idx}" class="respuesta-container">
                             <div class="respuesta">
                                 <button class="cerrar-respuesta" onclick="cerrarRespuesta(${idx})">✕</button>
-                                <div class="respuesta-texto">💬 ${escapeHtml(p.respuesta)}</div>
+                                <div class="respuesta-texto">💬 ${respuestaFormateada}</div>
                                 <div class="respuesta-autor">— ${escapeHtml(p.respondio)}</div>
                             </div>
                         </div>
