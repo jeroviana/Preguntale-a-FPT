@@ -20,49 +20,55 @@
             padding-bottom: 80px;
         }
 
-        /* Header con banda roja y degradado en el título */
+        /* Header: todo en columna, sin espacios extra */
         .header {
             background: white;
-            padding: 24px 20px 16px 20px;
+            padding: 16px 20px 12px 20px;
             text-align: center;
             border-bottom: 2px solid #D31224;
         }
+        /* Logo más grande y más cerca del título */
         .logo {
-            max-width: 130px;
+            max-width: 140px;
             height: auto;
-            margin-bottom: 8px;
+            margin-bottom: 4px;
         }
-        /* Título con degradado rojo-negro */
+        /* Contenedor del título en dos líneas, centrado */
         .titulo-principal {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            flex-wrap: wrap;
-            margin-bottom: 8px;
+            margin: 8px 0 4px 0;
         }
         .titulo-principal h1 {
-            font-size: 2.4rem;
             font-weight: 800;
             letter-spacing: -1px;
             background: linear-gradient(135deg, #D31224 0%, #1A1A1A 80%);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
-            text-shadow: none;
+            line-height: 1.2;
         }
-        .titulo-principal .icono {
-            font-size: 2.8rem;
+        .linea-fpt {
+            font-size: 2.2rem;
         }
+        .linea-te-escucha {
+            font-size: 1.8rem;
+        }
+        /* Emoji de urna: se muestra aparte, sin romper */
+        .emoji-urna {
+            font-size: 2rem;
+            display: inline-block;
+            margin-left: 8px;
+            vertical-align: middle;
+        }
+        /* Slogan: siempre abajo, bloque independiente */
         .slogan {
             font-size: 0.9rem;
             font-weight: 500;
             color: #D31224;
             letter-spacing: 0.5px;
-            margin-top: 4px;
+            margin-top: 8px;
             border-top: 1px solid #F0F2F5;
             display: inline-block;
-            padding-top: 8px;
+            padding-top: 6px;
         }
 
         /* Contenedor principal */
@@ -123,22 +129,12 @@
             justify-content: center;
             gap: 10px;
         }
-        .btn-abrir-asistente:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 24px rgba(211,18,36,0.4);
-        }
 
-        /* Muro de preguntas */
-        .muro {
-            background: transparent;
-        }
+        /* Muro de preguntas con acordeón */
         .muro h2 {
             font-size: 1.3rem;
             font-weight: 600;
             margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
         }
         .pregunta-item {
             background: white;
@@ -148,9 +144,6 @@
             box-shadow: 0 4px 14px rgba(0,0,0,0.03);
             border: 1px solid #E9EEF3;
             transition: all 0.2s;
-        }
-        .pregunta-item:hover {
-            border-color: #D31224;
         }
         .pregunta-header {
             display: flex;
@@ -187,18 +180,6 @@
             border-radius: 20px;
             border-left: 4px solid #D31224;
         }
-        .respuesta-texto {
-            font-size: 0.9rem;
-            line-height: 1.5;
-            color: #1E2A3E;
-        }
-        .respuesta-autor {
-            font-size: 0.7rem;
-            font-weight: 600;
-            margin-top: 10px;
-            color: #D31224;
-            text-align: right;
-        }
         .btn-ver-respuesta {
             background: none;
             border: none;
@@ -210,10 +191,6 @@
             margin-left: 32px;
             padding: 4px 8px;
             border-radius: 20px;
-            transition: 0.2s;
-        }
-        .btn-ver-respuesta:hover {
-            background: #FEF2F2;
         }
         .loading {
             text-align: center;
@@ -221,7 +198,7 @@
             color: #6C7A91;
         }
 
-        /* ASISTENTE MODAL (paso a paso) - se mantiene igual */
+        /* ASISTENTE MODAL (paso a paso, intacto) */
         .asistente-overlay {
             position: fixed;
             top: 0;
@@ -293,9 +270,6 @@
             width: 100%;
             text-align: center;
         }
-        .boton-opcion:hover {
-            background: #E2E8F0;
-        }
         .boton-opcion.principal {
             background: #D31224;
             color: white;
@@ -309,14 +283,8 @@
             font-size: 0.9rem;
             margin: 8px 0 16px;
         }
-        select:focus, textarea:focus, input:focus {
-            border-color: #D31224;
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(211,18,36,0.1);
-        }
         textarea {
             min-height: 100px;
-            resize: vertical;
         }
         .btn-siguiente {
             background: #D31224;
@@ -329,12 +297,6 @@
             cursor: pointer;
             width: 100%;
             margin-top: 12px;
-        }
-        .error-text {
-            color: #D31224;
-            font-size: 0.75rem;
-            margin-top: -8px;
-            margin-bottom: 8px;
         }
         footer {
             text-align: center;
@@ -351,9 +313,10 @@
 <div class="header">
     <img src="https://i.postimg.cc/zvxt3PN8/LOGO-FPT.png" class="logo" alt="FPT">
     <div class="titulo-principal">
-        <span class="icono">👂</span>
-        <h1>FPT te escucha</h1>
-        <span class="icono">🗣️</span>
+        <h1>
+            <div class="linea-fpt">FPT</div>
+            <div class="linea-te-escucha">te escucha <span class="emoji-urna">🗳️</span></div>
+        </h1>
     </div>
     <div class="slogan">Tu voz construye el cambio</div>
 </div>
@@ -374,12 +337,11 @@
     <span>¿Preferís hablarnos directamente?</span>
 </a>
 
-<!-- ASISTENTE MODAL (paso a paso, igual que antes) -->
+<!-- ASISTENTE MODAL (paso a paso) - mismo código funcional -->
 <div id="asistenteModal" class="asistente-overlay">
     <div class="asistente-card">
         <span class="close-asistente" id="closeAsistente">&times;</span>
         
-        <!-- Paso 1: ¿A quién va dirigida la pregunta? -->
         <div id="paso1" class="paso activo">
             <h3>📌 ¿Tu pregunta va dirigida a alguien en especial?</h3>
             <div class="grupo-botones">
@@ -388,7 +350,6 @@
             </div>
         </div>
 
-        <!-- Paso 2: Seleccionar destinatario -->
         <div id="paso2" class="paso">
             <h3>👤 Elegí el destinatario/a:</h3>
             <select id="destinatarioSelect">
@@ -409,7 +370,6 @@
             <button class="btn-siguiente" id="btnSiguienteDestino">Continuar →</button>
         </div>
 
-        <!-- Paso 3: Escribir la pregunta -->
         <div id="paso3" class="paso">
             <h3>✏️ Escribí tu pregunta</h3>
             <textarea id="preguntaTexto" placeholder="¿Qué te gustaría saber?"></textarea>
@@ -417,7 +377,6 @@
             <button class="btn-siguiente" id="btnSiguientePregunta">Continuar →</button>
         </div>
 
-        <!-- Paso 4: Anonimato -->
         <div id="paso4" class="paso">
             <h3>🤔 ¿Querés que tu pregunta sea anónima?</h3>
             <div class="grupo-botones">
@@ -426,7 +385,6 @@
             </div>
         </div>
 
-        <!-- Paso 4b: ingresar nombre -->
         <div id="paso4b" class="paso">
             <h3>📝 ¿Cómo te llamas?</h3>
             <input type="text" id="nombrePreguntador" placeholder="Tu nombre">
@@ -434,7 +392,6 @@
             <button class="btn-siguiente" id="btnSiguienteNombre">Continuar →</button>
         </div>
 
-        <!-- Paso 5: ¿Querés que te contactemos? -->
         <div id="paso5" class="paso">
             <h3>📞 ¿Te gustaría que te contactemos cuando respondamos?</h3>
             <div class="grupo-botones">
@@ -443,7 +400,6 @@
             </div>
         </div>
 
-        <!-- Paso 6: Número de teléfono -->
         <div id="paso6" class="paso">
             <h3>📱 Dejanos tu número de teléfono</h3>
             <input type="tel" id="telefonoContacto" placeholder="Número con código de área">
@@ -489,7 +445,6 @@
         mostrarPaso('paso1');
     }
 
-    // Paso 1
     document.querySelectorAll('#paso1 .boton-opcion').forEach(btn => {
         btn.addEventListener('click', () => {
             datosPregunta.tipoDestino = btn.getAttribute('data-destino');
@@ -578,7 +533,12 @@
     cerrarBtn.onclick = () => { modal.classList.remove('active'); reiniciarAsistente(); };
     modal.onclick = (e) => { if (e.target === modal) modal.classList.remove('active'); };
 
-    // ========== MURO CON ACORDEÓN (respuestas ocultas) ==========
+    // ========== MURO CON ACORDEÓN ==========
+    window.toggleRespuesta = function(idx) {
+        const respuestaDiv = document.getElementById(`respuesta-${idx}`);
+        if (respuestaDiv) respuestaDiv.classList.toggle('visible');
+    };
+
     async function cargarMuro() {
         const container = document.getElementById('muroLista');
         container.innerHTML = '<div class="loading">Cargando preguntas...</div>';
@@ -617,11 +577,6 @@
             container.innerHTML = '<p class="loading">Error al cargar. Intentalo de nuevo.</p>';
         }
     }
-
-    window.toggleRespuesta = function(idx) {
-        const respuestaDiv = document.getElementById(`respuesta-${idx}`);
-        if (respuestaDiv) respuestaDiv.classList.toggle('visible');
-    };
 
     function escapeHtml(str) {
         if (!str) return '';
