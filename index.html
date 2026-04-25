@@ -4,68 +4,89 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>FPT te escucha - Preguntale a la lista</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
-        /* Reset y base */
         * {
-            -webkit-tap-highlight-color: transparent; /* elimina resplandor azul al tocar */
-            user-select: none; /* evita selección de texto en toda la página (pero inputs y textarea lo habilitamos luego) */
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
         }
         input, textarea, select {
-            user-select: text; /* permitir selección en formularios */
+            user-select: text;
         }
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Montserrat', sans-serif;
             background: #F5F7FA;
-            color: #9B2C2C; /* rojo oscuro FPT, más cálido que negro */
+            color: #8B1E1E;
             line-height: 1.5;
             padding-bottom: 80px;
             margin: 0;
         }
-        /* Header */
+        /* Header compacto */
         .header {
             background: white;
-            padding: 12px 20px 8px 20px;
+            padding: 12px 20px 12px 20px;
             text-align: center;
             border-bottom: 3px solid #D31224;
         }
         .logo {
-            max-width: 150px;
+            max-width: 160px;
             height: auto;
-            margin-bottom: 2px;
+            margin-bottom: 4px;
         }
-        /* Título en mayúsculas, rojo FPT, más compacto */
+        /* Contenedor del título con emoji lateral sin afectar centrado */
+        .titulo-wrapper {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+        }
         .titulo-principal {
-            margin: 2px 0 4px 0;
-        }
-        .titulo-principal h1 {
-            font-weight: 800;
-            letter-spacing: -0.5px;
-            color: #D31224;       /* rojo FPT principal */
-            line-height: 1.1;
-            text-transform: uppercase;
+            display: inline-block;
+            text-align: center;
         }
         .linea-fpt {
-            font-size: 2rem;
+            font-size: 3rem;
+            font-weight: 900;
+            color: #D31224;
+            text-transform: uppercase;
+            letter-spacing: -1px;
+            line-height: 1.1;
         }
         .linea-te-escucha {
-            font-size: 1.6rem;
+            font-size: 2rem;
+            font-weight: 800;
+            color: #D31224;
+            text-transform: uppercase;
+            letter-spacing: -0.5px;
+            line-height: 1.2;
         }
-        /* Emoji libre (sin herencia de color, tamaño independiente) */
-        .emoji-libre {
-            display: inline-block;
-            margin-left: 8px;
-            color: initial;    /* fuerza el color original del emoji */
-            font-size: 1.4rem;
-            vertical-align: middle;
+        /* Emoji lateral (absoluto a la derecha, sin ocupar espacio en el flujo) */
+        .emoji-lateral {
+            position: absolute;
+            right: -40px;   /* se sale del contenedor pero sin romper el centrado */
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 2.2rem;
+            color: initial;
+            pointer-events: none; /* para que no interfiera con clics */
         }
-        /* Slogan debajo, con color más tenue */
+        /* Ajuste para móviles: si la pantalla es muy pequeña, movemos el emoji abajo */
+        @media (max-width: 480px) {
+            .titulo-wrapper {
+                flex-direction: column;
+            }
+            .emoji-lateral {
+                position: static;
+                transform: none;
+                margin-top: 6px;
+            }
+        }
         .slogan {
             font-size: 0.85rem;
-            font-weight: 500;
+            font-weight: 600;
             color: #B85C5C;
-            letter-spacing: 0.3px;
-            margin-top: 6px;
+            margin-top: 8px;
             border-top: 1px solid #F0F2F5;
             display: inline-block;
             padding-top: 6px;
@@ -78,7 +99,7 @@
             padding: 20px 16px;
         }
 
-        /* Botón flotante WhatsApp (siempre visible) */
+        /* Botón flotante WhatsApp */
         .whatsapp-float {
             position: fixed;
             bottom: 20px;
@@ -105,7 +126,7 @@
             .whatsapp-float { padding: 8px 14px; }
         }
 
-        /* Botón principal (hacer pregunta) */
+        /* Botón principal hacer pregunta */
         .btn-abrir-asistente {
             background: #D31224;
             color: white;
@@ -126,12 +147,12 @@
         }
         .btn-abrir-asistente:active { transform: scale(0.98); }
 
-        /* Muro de preguntas */
+        /* Muro */
         .muro h2 {
             font-size: 1.2rem;
-            font-weight: 600;
+            font-weight: 700;
             margin-bottom: 20px;
-            color: #9B2C2C;
+            color: #8B1E1E;
         }
         .pregunta-item {
             background: white;
@@ -140,9 +161,7 @@
             padding: 16px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.02);
             border: 1px solid #F0F0F0;
-            transition: 0.2s;
         }
-        /* La pregunta ahora es un botón accesible */
         .pregunta-boton {
             background: none;
             border: none;
@@ -163,13 +182,13 @@
         .pregunta-texto {
             font-weight: 700;
             font-size: 1rem;
-            color: #9B2C2C;
+            color: #8B1E1E;
             flex: 1;
             line-height: 1.4;
         }
         .pregunta-meta {
             font-size: 0.65rem;
-            color: #8F5E5E;
+            color: #A66F6F;
             margin: 6px 0 8px 28px;
         }
         .btn-ver-respuesta {
@@ -182,9 +201,7 @@
             margin: 4px 0 0 28px;
             padding: 5px 12px;
             border-radius: 30px;
-            transition: 0.2s;
         }
-        /* Respuesta desplegable con animación suave */
         .respuesta-container {
             display: block;
             max-height: 0;
@@ -194,7 +211,7 @@
             margin-top: 12px;
         }
         .respuesta-container.visible {
-            max-height: 300px;   /* suficiente para respuestas largas */
+            max-height: 300px;
             opacity: 1;
         }
         .respuesta {
@@ -209,7 +226,6 @@
             line-height: 1.5;
             color: #4A2E2E;
         }
-        /* firma a la derecha y en rojo, como querías */
         .respuesta-autor {
             font-size: 0.7rem;
             font-weight: 600;
@@ -217,7 +233,6 @@
             color: #D31224;
             text-align: right;
         }
-        /* Botón cerrar (X) dentro de la respuesta, solo cuando está visible */
         .cerrar-respuesta {
             position: absolute;
             top: 8px;
@@ -227,22 +242,14 @@
             font-size: 1.2rem;
             cursor: pointer;
             color: #aaa;
-            padding: 0;
-            width: 24px;
-            height: 24px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
         }
-        .cerrar-respuesta:hover { background: #f0f0f0; }
         .loading {
             text-align: center;
             padding: 40px;
-            color: #8F5E5E;
+            color: #A66F6F;
         }
 
-        /* ASISTENTE MODAL (sin cambios en el flujo, solo estilos mínimos) */
+        /* ASISTENTE MODAL (sin cambios visuales importantes) */
         .asistente-overlay {
             position: fixed;
             top: 0;
@@ -293,7 +300,7 @@
             font-size: 1.3rem;
             font-weight: 700;
             margin-bottom: 18px;
-            color: #9B2C2C;
+            color: #8B1E1E;
         }
         .grupo-botones {
             display: flex;
@@ -309,7 +316,6 @@
             font-weight: 600;
             font-size: 0.9rem;
             cursor: pointer;
-            width: 100%;
         }
         .boton-opcion.principal {
             background: #D31224;
@@ -320,7 +326,7 @@
             padding: 12px 14px;
             border-radius: 20px;
             border: 1.5px solid #E2E8F0;
-            font-family: 'Inter', sans-serif;
+            font-family: 'Montserrat', sans-serif;
             font-size: 0.9rem;
             margin: 8px 0 16px;
             user-select: text;
@@ -343,11 +349,12 @@
 
 <div class="header">
     <img src="https://i.postimg.cc/zvxt3PN8/LOGO-FPT.png" class="logo" alt="FPT">
-    <div class="titulo-principal">
-        <h1>
+    <div class="titulo-wrapper">
+        <div class="titulo-principal">
             <div class="linea-fpt">FPT</div>
-            <div class="linea-te-escucha">TE ESCUCHA <span class="emoji-libre">🗳️</span></div>
-        </h1>
+            <div class="linea-te-escucha">TE ESCUCHA</div>
+        </div>
+        <div class="emoji-lateral">🗳️</div>
     </div>
     <div class="slogan">Tu voz construye el cambio</div>
 </div>
@@ -357,9 +364,7 @@
 
     <div class="muro">
         <h2>📢 Preguntas respondidas</h2>
-        <div id="muroLista">
-            <div class="loading">Cargando preguntas...</div>
-        </div>
+        <div id="muroLista"><div class="loading">Cargando preguntas...</div></div>
     </div>
 </div>
 
@@ -368,7 +373,7 @@
     <span>¿Preferís hablarnos directamente?</span>
 </a>
 
-<!-- Asistente modal (idéntica lógica, solo se mantiene) -->
+<!-- ASISTENTE MODAL (mismo código funcional de antes) -->
 <div id="asistenteModal" class="asistente-overlay">
     <div class="asistente-card">
         <span class="close-asistente" id="closeAsistente">&times;</span>
@@ -548,7 +553,7 @@
     cerrarBtn.onclick = () => { modal.classList.remove('active'); reiniciarAsistente(); };
     modal.onclick = (e) => { if (e.target === modal) modal.classList.remove('active'); };
 
-    // ========== MURO CON NUEVA INTERACCIÓN (botón ver respuesta + X) ==========
+    // ========== MURO CON RESPUESTAS OCULTAS Y ANIMACIÓN ==========
     function toggleRespuesta(idx, forceClose = false) {
         const respuestaDiv = document.getElementById(`respuesta-${idx}`);
         const btnVer = document.getElementById(`btnVer-${idx}`);
