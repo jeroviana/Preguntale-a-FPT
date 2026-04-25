@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>Preguntale a FPT</title>
+    <title>Preguntale a FPT - La voz de los estudiantes</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
     <style>
         * {
@@ -20,29 +20,30 @@
             padding-bottom: 80px;
         }
 
-        /* Header */
+        /* Header con logo más grande y menos espacio */
         .header {
             background: white;
-            padding: 24px 20px;
+            padding: 20px 20px 12px 20px;
             text-align: center;
             border-bottom: 2px solid #D31224;
             box-shadow: 0 4px 12px rgba(0,0,0,0.02);
         }
         .logo {
-            max-width: 110px;
+            max-width: 130px;
             height: auto;
-            margin-bottom: 12px;
+            margin-bottom: 4px;  /* menos espacio */
         }
         h1 {
-            font-size: 1.7rem;
+            font-size: 1.8rem;
             font-weight: 800;
             letter-spacing: -0.5px;
             color: #0F172A;
+            margin-top: 4px;
         }
         .tagline {
             font-size: 0.85rem;
             color: #5B6E8C;
-            margin-top: 4px;
+            margin-top: 6px;
         }
 
         /* Contenedor principal */
@@ -52,50 +53,39 @@
             padding: 24px 20px;
         }
 
-        /* Botón principal flotante (más sutil) */
+        /* Botón flotante de WhatsApp con texto siempre visible */
         .whatsapp-float {
             position: fixed;
-            bottom: 24px;
-            right: 24px;
+            bottom: 20px;
+            right: 20px;
             background-color: #25D366;
-            border-radius: 50%;
-            width: 56px;
-            height: 56px;
+            border-radius: 60px;
             display: flex;
             align-items: center;
-            justify-content: center;
+            gap: 8px;
+            padding: 10px 16px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
             transition: all 0.2s;
             z-index: 1000;
             text-decoration: none;
-        }
-        .whatsapp-float:hover {
-            transform: scale(1.05);
-            background-color: #20b859;
+            color: white;
+            font-weight: 600;
+            font-size: 0.85rem;
         }
         .whatsapp-float img {
-            width: 32px;
-            height: 32px;
+            width: 24px;
+            height: 24px;
         }
-        /* Tooltip sutil para el botón flotante */
-        .whatsapp-float::after {
-            content: "¿Preferís hablarnos directamente?";
-            position: absolute;
-            right: 70px;
-            background: #1E293B;
-            color: white;
-            font-size: 0.7rem;
-            font-weight: 500;
-            padding: 6px 12px;
-            border-radius: 30px;
-            white-space: nowrap;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.2s;
-            font-family: 'Inter', sans-serif;
+        .whatsapp-float span {
+            display: inline-block;
         }
-        .whatsapp-float:hover::after {
-            opacity: 1;
+        @media (max-width: 480px) {
+            .whatsapp-float span {
+                font-size: 0.75rem;
+            }
+            .whatsapp-float {
+                padding: 8px 14px;
+            }
         }
 
         /* Botón para abrir el asistente */
@@ -122,7 +112,7 @@
             box-shadow: 0 6px 16px rgba(211,18,36,0.35);
         }
 
-        /* Muro de preguntas (tarjetas) */
+        /* Muro de preguntas */
         .muro {
             background: transparent;
         }
@@ -152,22 +142,20 @@
             font-size: 1.05rem;
             margin-bottom: 8px;
             color: #0F172A;
-            padding-right: 20px;
-            position: relative;
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
         }
-        .pregunta-texto::before {
-            content: "❓";
-            position: absolute;
-            left: -24px;
-            top: 2px;
-            font-size: 0.9rem;
-            opacity: 0.7;
+        .pregunta-icono {
+            font-size: 1rem;
+            flex-shrink: 0;
+            margin-top: 2px;
         }
         .pregunta-meta {
             font-size: 0.7rem;
             color: #6C7A91;
             margin-bottom: 14px;
-            margin-left: 4px;
+            margin-left: 28px;
         }
         .respuesta {
             background: #F8FAFE;
@@ -253,21 +241,21 @@
         }
         .grupo-botones {
             display: flex;
-            flex-wrap: wrap;
+            flex-direction: column;
             gap: 12px;
             margin: 24px 0 16px;
         }
         .boton-opcion {
             background: #F1F5F9;
             border: none;
-            padding: 12px 20px;
+            padding: 14px 20px;
             border-radius: 60px;
             font-weight: 600;
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             cursor: pointer;
             transition: all 0.2s;
             color: #1E293B;
-            flex: 1;
+            width: 100%;
             text-align: center;
         }
         .boton-opcion:hover {
@@ -316,17 +304,17 @@
             background: #CBD5E1;
             cursor: not-allowed;
         }
-        .mensaje-final {
-            text-align: center;
-            padding: 12px;
-            border-radius: 20px;
-            margin-top: 16px;
-        }
         .error-text {
             color: #D31224;
             font-size: 0.75rem;
             margin-top: -8px;
             margin-bottom: 8px;
+        }
+        .mensaje-final {
+            text-align: center;
+            padding: 12px;
+            border-radius: 20px;
+            margin-top: 16px;
         }
         footer {
             text-align: center;
@@ -342,8 +330,8 @@
 
 <div class="header">
     <img src="https://i.postimg.cc/zvxt3PN8/LOGO-FPT.png" class="logo" alt="FPT">
-    <h1>Preguntale a FPT</h1>
-    <p class="tagline">Respondemos tus dudas con transparencia</p>
+    <h1>🗳️ Hacé tu pregunta, exigí respuestas</h1>
+    <p class="tagline">La voz de los estudiantes: preguntale a FPT</p>
 </div>
 
 <div class="container">
@@ -357,8 +345,9 @@
     </div>
 </div>
 
-<a href="https://wa.me/+595981614237?text=Hola%20FPT%2C%20tengo%20una%20consulta" class="whatsapp-float" target="_blank" id="whatsappFloat">
+<a href="https://wa.me/+595981614237?text=Hola%20FPT%2C%20tengo%20una%20consulta" class="whatsapp-float" target="_blank">
     <img src="https://cdn-icons-png.flaticon.com/512/3670/3670051.png" alt="WhatsApp">
+    <span>¿Preferís hablarnos directamente?</span>
 </a>
 
 <!-- ASISTENTE MODAL (paso a paso) -->
@@ -370,7 +359,7 @@
         <div id="paso1" class="paso activo">
             <h3>📌 ¿Tu pregunta va dirigida a alguien en especial?</h3>
             <div class="grupo-botones">
-                <button class="boton-opcion" data-destino="general">A la lista en general</button>
+                <button class="boton-opcion secundario" data-destino="general">A la lista en general</button>
                 <button class="boton-opcion principal" data-destino="especifico">A una persona específica</button>
             </div>
         </div>
@@ -404,21 +393,37 @@
             <button class="btn-siguiente" id="btnSiguientePregunta">Continuar →</button>
         </div>
 
-        <!-- Paso 4: ¿Querés que te contactemos? -->
+        <!-- Paso 4: Anonimato (NUEVO) -->
         <div id="paso4" class="paso">
+            <h3>🤔 ¿Querés que tu pregunta sea anónima?</h3>
+            <div class="grupo-botones">
+                <button class="boton-opcion secundario" data-anonimo="si">Sí, manteneme en el anonimato</button>
+                <button class="boton-opcion principal" data-anonimo="no">No, quiero dejar mi nombre</button>
+            </div>
+        </div>
+
+        <!-- Paso 4b: ingresar nombre (solo si no es anónimo) -->
+        <div id="paso4b" class="paso">
+            <h3>📝 ¿Cómo te llamas?</h3>
+            <input type="text" id="nombrePreguntador" placeholder="Tu nombre" autocomplete="off">
+            <div id="errorNombre" class="error-text"></div>
+            <button class="btn-siguiente" id="btnSiguienteNombre">Continuar →</button>
+        </div>
+
+        <!-- Paso 5: ¿Querés que te contactemos? -->
+        <div id="paso5" class="paso">
             <h3>📞 ¿Te gustaría que te contactemos cuando respondamos?</h3>
             <div class="grupo-botones">
-                <button class="boton-opcion" data-contacto="no">No, solo quiero dejar la pregunta</button>
+                <button class="boton-opcion secundario" data-contacto="no">No, solo quiero dejar la pregunta</button>
                 <button class="boton-opcion principal" data-contacto="si">Sí, quiero que me contacten</button>
             </div>
         </div>
 
-        <!-- Paso 5: Datos de contacto (nombre y teléfono) -->
-        <div id="paso5" class="paso">
-            <h3>📝 Dejanos tus datos</h3>
-            <input type="text" id="nombreContacto" placeholder="Tu nombre" autocomplete="off">
-            <input type="tel" id="telefonoContacto" placeholder="Número de teléfono (con código de área)" autocomplete="off">
-            <div id="errorContacto" class="error-text"></div>
+        <!-- Paso 6: Número de teléfono (solo si quiere contacto) -->
+        <div id="paso6" class="paso">
+            <h3>📱 Dejanos tu número de teléfono</h3>
+            <input type="tel" id="telefonoContacto" placeholder="Número con código de área" autocomplete="off">
+            <div id="errorTelefono" class="error-text"></div>
             <button class="btn-siguiente" id="btnEnviarPregunta">Enviar pregunta</button>
         </div>
 
@@ -435,28 +440,24 @@
     const modal = document.getElementById('asistenteModal');
     const abrirBtn = document.getElementById('abrirAsistente');
     const cerrarBtn = document.getElementById('closeAsistente');
-    const pasos = {
-        paso1: document.getElementById('paso1'),
-        paso2: document.getElementById('paso2'),
-        paso3: document.getElementById('paso3'),
-        paso4: document.getElementById('paso4'),
-        paso5: document.getElementById('paso5')
-    };
     
     let datosPregunta = {
         tipoDestino: null,   // 'general' o 'especifico'
         destinatario: '',
         textoPregunta: '',
-        contacto: null,      // 'si' o 'no'
+        anonimo: null,       // 'si' o 'no'
         nombre: '',
+        contacto: null,      // 'si' o 'no'
         telefono: ''
     };
 
     function mostrarPaso(pasoId) {
-        Object.keys(pasos).forEach(id => {
-            pasos[id].classList.remove('activo');
+        const pasos = ['paso1', 'paso2', 'paso3', 'paso4', 'paso4b', 'paso5', 'paso6'];
+        pasos.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.classList.remove('activo');
         });
-        pasos[pasoId].classList.add('activo');
+        document.getElementById(pasoId).classList.add('activo');
     }
 
     function reiniciarAsistente() {
@@ -464,45 +465,45 @@
             tipoDestino: null,
             destinatario: '',
             textoPregunta: '',
-            contacto: null,
+            anonimo: null,
             nombre: '',
+            contacto: null,
             telefono: ''
         };
         // Limpiar campos
         document.getElementById('destinatarioSelect').value = "Presidente";
         document.getElementById('preguntaTexto').value = "";
-        document.getElementById('nombreContacto').value = "";
+        document.getElementById('nombrePreguntador').value = "";
         document.getElementById('telefonoContacto').value = "";
         document.getElementById('errorPregunta').innerText = "";
-        document.getElementById('errorContacto').innerText = "";
+        document.getElementById('errorNombre').innerText = "";
+        document.getElementById('errorTelefono').innerText = "";
         document.getElementById('mensajeAsistente').innerHTML = "";
         mostrarPaso('paso1');
     }
 
-    // Eventos para paso 1 (botones destino)
+    // ----- Paso 1: ¿A quién va dirigida? -----
     document.querySelectorAll('#paso1 .boton-opcion').forEach(btn => {
         btn.addEventListener('click', () => {
             const destino = btn.getAttribute('data-destino');
             datosPregunta.tipoDestino = destino;
             if (destino === 'general') {
                 datosPregunta.destinatario = 'Lista FPT en general';
-                // Saltamos el paso 2, vamos directo a paso 3
-                mostrarPaso('paso3');
+                mostrarPaso('paso3');  // saltamos paso 2
             } else {
-                // Mostrar paso 2 para elegir destinatario específico
                 mostrarPaso('paso2');
             }
         });
     });
 
-    // Paso 2: botón continuar destinatario
+    // ----- Paso 2: elegir destinatario específico -----
     document.getElementById('btnSiguienteDestino').addEventListener('click', () => {
         const select = document.getElementById('destinatarioSelect');
         datosPregunta.destinatario = select.value;
         mostrarPaso('paso3');
     });
 
-    // Paso 3: validar y continuar a paso 4
+    // ----- Paso 3: escribir pregunta -----
     document.getElementById('btnSiguientePregunta').addEventListener('click', () => {
         const pregunta = document.getElementById('preguntaTexto').value.trim();
         if (!pregunta) {
@@ -511,33 +512,56 @@
         }
         document.getElementById('errorPregunta').innerText = '';
         datosPregunta.textoPregunta = pregunta;
-        mostrarPaso('paso4');
+        mostrarPaso('paso4');  // anonimato
     });
 
-    // Paso 4: contacto sí/no
+    // ----- Paso 4: ¿Anónimo? -----
     document.querySelectorAll('#paso4 .boton-opcion').forEach(btn => {
         btn.addEventListener('click', () => {
-            const contacto = btn.getAttribute('data-contacto');
-            datosPregunta.contacto = contacto;
-            if (contacto === 'si') {
-                mostrarPaso('paso5');
+            const anonimo = btn.getAttribute('data-anonimo');
+            datosPregunta.anonimo = anonimo;
+            if (anonimo === 'si') {
+                datosPregunta.nombre = '';  // anónimo, no guarda nombre
+                mostrarPaso('paso5');       // saltamos a contacto
             } else {
-                // Enviar directamente sin datos de contacto
-                enviarPregunta();
+                mostrarPaso('paso4b');       // pedir nombre
             }
         });
     });
 
-    // Paso 5: enviar con datos de contacto
-    document.getElementById('btnEnviarPregunta').addEventListener('click', () => {
-        const nombre = document.getElementById('nombreContacto').value.trim();
-        const telefono = document.getElementById('telefonoContacto').value.trim();
-        if (!nombre || !telefono) {
-            document.getElementById('errorContacto').innerText = 'Completá nombre y teléfono para que te contactemos.';
+    // ----- Paso 4b: ingresar nombre -----
+    document.getElementById('btnSiguienteNombre').addEventListener('click', () => {
+        const nombre = document.getElementById('nombrePreguntador').value.trim();
+        if (!nombre) {
+            document.getElementById('errorNombre').innerText = 'Ingresá tu nombre para continuar.';
             return;
         }
-        document.getElementById('errorContacto').innerText = '';
+        document.getElementById('errorNombre').innerText = '';
         datosPregunta.nombre = nombre;
+        mostrarPaso('paso5');
+    });
+
+    // ----- Paso 5: ¿Querés que te contactemos? -----
+    document.querySelectorAll('#paso5 .boton-opcion').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const contacto = btn.getAttribute('data-contacto');
+            datosPregunta.contacto = contacto;
+            if (contacto === 'si') {
+                mostrarPaso('paso6');  // pedir teléfono
+            } else {
+                enviarPregunta();       // envía sin teléfono
+            }
+        });
+    });
+
+    // ----- Paso 6: ingresar teléfono y enviar -----
+    document.getElementById('btnEnviarPregunta').addEventListener('click', () => {
+        const telefono = document.getElementById('telefonoContacto').value.trim();
+        if (!telefono) {
+            document.getElementById('errorTelefono').innerText = 'Ingresá tu número de teléfono para que te contactemos.';
+            return;
+        }
+        document.getElementById('errorTelefono').innerText = '';
         datosPregunta.telefono = telefono;
         enviarPregunta();
     });
@@ -546,7 +570,7 @@
         const payload = {
             pregunta: datosPregunta.textoPregunta,
             destinatario: datosPregunta.destinatario,
-            nombre: datosPregunta.contacto === 'si' ? datosPregunta.nombre : '',
+            nombre: datosPregunta.anonimo === 'si' ? '' : datosPregunta.nombre,
             telefono: datosPregunta.contacto === 'si' ? datosPregunta.telefono : ''
         };
         
@@ -564,7 +588,7 @@
                 setTimeout(() => {
                     modal.classList.remove('active');
                     reiniciarAsistente();
-                    cargarMuro(); // recargar muro por si acaso
+                    cargarMuro();
                 }, 2000);
             } else {
                 msgDiv.innerHTML = '<p style="color: #D31224;">❌ Error al enviar. Intentalo de nuevo.</p>';
@@ -606,7 +630,10 @@
             preguntas.forEach(p => {
                 html += `
                     <div class="pregunta-item">
-                        <div class="pregunta-texto">${escapeHtml(p.pregunta)}</div>
+                        <div class="pregunta-texto">
+                            <span class="pregunta-icono">❓</span>
+                            <span>${escapeHtml(p.pregunta)}</span>
+                        </div>
                         <div class="pregunta-meta">
                             ${p.destinatario ? `Dirigida a: ${escapeHtml(p.destinatario)} · ` : ''}
                             ${p.nombrePregunto ? `Pregunta de: ${escapeHtml(p.nombrePregunto)} · ` : ''}
