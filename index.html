@@ -36,13 +36,13 @@
             height: auto;
             margin-bottom: 4px;
         }
-        /* Contenedor del título con centrado perfecto y emoji absoluto */
+        /* Contenedor del título con centrado perfecto y emoji ajustado */
         .titulo-wrapper {
             position: relative;
             display: flex;
             justify-content: center;
             margin: 0 auto;
-            padding: 0 40px; /* Espacio para que el emoji no se corte sin generar scroll */
+            padding: 0 32px; /* espacio para el emoji sin desborde */
         }
         .titulo-principal {
             text-align: center;
@@ -63,10 +63,10 @@
             letter-spacing: -0.5px;
             line-height: 1.2;
         }
-        /* Emoji posicionado absolutamente a la derecha, sin afectar el centrado, sin scroll */
+        /* Emoji posicionado absolutamente, más cerca del texto (right: 8px) */
         .emoji-lateral {
             position: absolute;
-            right: 0;
+            right: 8px;
             top: 50%;
             transform: translateY(-50%);
             font-size: 2.2rem;
@@ -74,7 +74,7 @@
             pointer-events: none;
             white-space: nowrap;
         }
-        /* En móviles muy pequeños (ancho < 480px), movemos el emoji debajo del texto para evitar superposición */
+        /* En móviles muy pequeños, el emoji pasa a estar debajo */
         @media (max-width: 480px) {
             .titulo-wrapper {
                 flex-direction: column;
@@ -207,6 +207,7 @@
             padding: 5px 12px;
             border-radius: 30px;
         }
+        /* Respuesta con scroll si es muy larga */
         .respuesta-container {
             display: block;
             max-height: 0;
@@ -216,8 +217,9 @@
             margin-top: 12px;
         }
         .respuesta-container.visible {
-            max-height: 300px;
+            max-height: 350px;
             opacity: 1;
+            overflow-y: auto;
         }
         .respuesta {
             background: #FEF6F6;
@@ -254,7 +256,7 @@
             color: #A66F6F;
         }
 
-        /* ASISTENTE MODAL */
+        /* ASISTENTE MODAL - CORRECCIÓN: inputs no se salen */
         .asistente-overlay {
             position: fixed;
             top: 0;
@@ -283,6 +285,26 @@
             padding: 24px 20px 28px;
             position: relative;
             box-shadow: 0 20px 35px rgba(0,0,0,0.2);
+            box-sizing: border-box;
+        }
+        /* Forzar que todos los campos del formulario no se salgan */
+        .asistente-card select,
+        .asistente-card textarea,
+        .asistente-card input {
+            width: 100%;
+            max-width: 100%;
+            box-sizing: border-box;
+            padding: 12px 14px;
+            border-radius: 20px;
+            border: 1.5px solid #E2E8F0;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.9rem;
+            margin: 8px 0 16px;
+            user-select: text;
+        }
+        .asistente-card textarea {
+            min-height: 90px;
+            resize: vertical;
         }
         .close-asistente {
             position: absolute;
@@ -321,22 +343,12 @@
             font-weight: 600;
             font-size: 0.9rem;
             cursor: pointer;
+            width: 100%;
         }
         .boton-opcion.principal {
             background: #D31224;
             color: white;
         }
-        select, textarea, input {
-            width: 100%;
-            padding: 12px 14px;
-            border-radius: 20px;
-            border: 1.5px solid #E2E8F0;
-            font-family: 'Montserrat', sans-serif;
-            font-size: 0.9rem;
-            margin: 8px 0 16px;
-            user-select: text;
-        }
-        textarea { min-height: 90px; }
         .btn-siguiente {
             background: #D31224;
             color: white;
@@ -452,11 +464,8 @@
     // ========== FUNCIÓN PARA FORMATEAR TEXTO (doble espacio = salto de párrafo) ==========
     function formatText(text) {
         if (!text) return "";
-        // Convertir punto seguido de espacio en punto + doble salto
         text = text.replace(/\. /g, '.<br><br>');
-        // Convertir dos espacios seguidos en doble salto (punto y aparte)
         text = text.replace(/  /g, '<br><br>');
-        // Convertir saltos de línea simples también (por si acaso)
         text = text.replace(/\n/g, '<br>');
         return text;
     }
@@ -606,7 +615,6 @@
             }
             let html = '';
             preguntas.forEach((p, idx) => {
-                // Aplicar formato a la pregunta y a la respuesta
                 const preguntaFormateada = formatText(escapeHtml(p.pregunta));
                 const respuestaFormateada = formatText(escapeHtml(p.respuesta));
                 html += `
