@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Preguntas y Respuestas - FPT</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --fpt-red: #D31224;
+            --fpt-black: #1A1A1A;
+            --fpt-white: #FFFFFF;
+            --fpt-gray: #F4F4F4;
+            --fpt-dark-gray: #555;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--fpt-gray);
+            color: var(--fpt-black);
+            padding-bottom: 80px;
+        }
+        /* Header */
+        .header {
+            background: white;
+            padding: 20px;
+            text-align: center;
+            border-bottom: 3px solid var(--fpt-red);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .logo { width: 80px; height: auto; margin-bottom: 10px; }
+        h1 { font-family: 'Playfair Display', serif; font-size: 1.6rem; color: var(--fpt-black); text-transform: uppercase; }
+        .tagline { font-size: 0.8rem; color: var(--fpt-dark-gray); }
+        /* Botón flotante WhatsApp */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #25D366;
+            border-radius: 50px;
+            padding: 12px 20px;
+            color: white;
+            font-weight: 700;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            z-index: 1000;
+            font-size: 0.9rem;
+        }
+        .whatsapp-float img { width: 24px; height: 24px; }
+        /* Contenedor principal */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        /* Botón principal */
+        .btn-primary {
+            background: var(--fpt-red);
+            color: white;
+            border: none;
+            padding: 14px 24px;
+            border-radius: 50px;
+            font-weight: 800;
+            font-size: 1rem;
+            cursor: pointer;
+            width: 100%;
+            transition: transform 0.2s;
+            margin-bottom: 30px;
+        }
+        .btn-primary:hover { transform: scale(1.02); }
+        /* Muro de preguntas */
+        .muro {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+        }
+        .pregunta-item {
+            border-bottom: 1px solid #eee;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+        }
+        .pregunta-texto {
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+            color: var(--fpt-black);
+        }
+        .pregunta-meta {
+            font-size: 0.7rem;
+            color: var(--fpt-dark-gray);
+            margin-bottom: 12px;
+        }
+        .respuesta {
+            background: var(--fpt-gray);
+            padding: 12px 16px;
+            border-radius: 12px;
+            margin-top: 8px;
+            border-left: 4px solid var(--fpt-red);
+        }
+        .respuesta-texto { font-size: 0.9rem; line-height: 1.5; }
+        .respuesta-autor { font-size: 0.7rem; font-weight: 700; margin-top: 8px; color: var(--fpt-red); }
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+        .modal-content {
+            background: white;
+            width: 90%;
+            max-width: 500px;
+            border-radius: 25px;
+            padding: 25px;
+            position: relative;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        .close-modal {
+            position: absolute;
+            right: 20px;
+            top: 15px;
+            font-size: 1.8rem;
+            cursor: pointer;
+            color: var(--fpt-dark-gray);
+        }
+        .form-group { margin-bottom: 15px; }
+        label { font-weight: 600; display: block; margin-bottom: 5px; }
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.9rem;
+        }
+        textarea { resize: vertical; min-height: 100px; }
+        .btn-submit {
+            background: var(--fpt-red);
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 50px;
+            font-weight: 800;
+            width: 100%;
+            cursor: pointer;
+        }
+        .contacto-opcional {
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 12px;
+            margin-top: 15px;
+        }
+        .hidden { display: none; }
+        footer {
+            text-align: center;
+            padding: 20px;
+            font-size: 0.7rem;
+            color: var(--fpt-dark-gray);
+        }
+        .loading { text-align: center; padding: 40px; }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <img src="https://i.postimg.cc/BQxRhYg4/LOGO-FPT.jpg" class="logo" alt="FPT">
+    <h1>Preguntas y Respuestas</h1>
+    <p class="tagline">Hacé tu pregunta, la respondemos y la publicamos</p>
+</div>
+
+<div class="container">
+    <button class="btn-primary" id="btnNuevaPregunta">➕ Dejar una pregunta</button>
+
+    <div class="muro">
+        <h2 style="margin-bottom: 15px; font-size: 1.3rem;">📢 Preguntas respondidas</h2>
+        <div id="muroLista">
+            <div class="loading">Cargando preguntas...</div>
+        </div>
+    </div>
+</div>
+
+<a href="https://wa.me/+595981614237?text=Hola%20FPT%2C%20tengo%20una%20consulta" class="whatsapp-float" target="_blank">
+    <img src="https://cdn-icons-png.flaticon.com/512/3670/3670051.png" alt="WhatsApp"> ¿Preferís hablarnos directamente? Click acá
+</a>
+
+<div id="modalPregunta" class="modal">
+    <div class="modal-content">
+        <span class="close-modal" id="closeModal">&times;</span>
+        <h2 style="margin-bottom: 15px;">📝 Dejar una pregunta</h2>
+        <form id="formPregunta">
+            <div class="form-group">
+                <label>¿Tu pregunta va dirigida a alguien o es para la lista en general?</label>
+                <select id="destinatarioTipo">
+                    <option value="general">A la lista en general</option>
+                    <option value="especifico">A una persona específica</option>
+                </select>
+            </div>
+            <div class="form-group hidden" id="grupoDestinatario">
+                <label>Elegí el destinatario/a:</label>
+                <select id="destinatarioSelect">
+                    <option value="Presidente">Presidente</option>
+                    <option value="Vicepresidenta">Vicepresidenta</option>
+                    <option value="Secretaría Académica">Secretaría Académica</option>
+                    <option value="Secretaría de Finanzas">Secretaría de Finanzas</option>
+                    <option value="Secretaría de Bienestar Estudiantil">Secretaría de Bienestar Estudiantil</option>
+                    <option value="Secretaría de Extensión">Secretaría de Extensión</option>
+                    <option value="Secretaría de Actividades Sociales">Secretaría de Actividades Sociales</option>
+                    <option value="Secretaría de Deportes">Secretaría de Deportes</option>
+                    <option value="Secretaría de Prensa">Secretaría de Prensa</option>
+                    <option value="Secretaría de Relaciones Exteriores">Secretaría de Relaciones Exteriores</option>
+                    <option value="Secretaría de Actas">Secretaría de Actas</option>
+                    <option value="Secretaría de Acción Social">Secretaría de Acción Social</option>
+                    <option value="Secretaría de Cultura">Secretaría de Cultura</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Escribí tu pregunta *</label>
+                <textarea id="pregunta" required></textarea>
+            </div>
+            <div class="contacto-opcional" id="contactoOpcional" style="display: none;">
+                <label>¿Te gustaría que te contactemos para avisarte cuando respondamos y conversar?</label>
+                <div style="display: flex; gap: 10px; margin-top: 8px;">
+                    <label><input type="radio" name="contacto" value="si"> Sí</label>
+                    <label><input type="radio" name="contacto" value="no" checked> No, solo quiero dejar la pregunta</label>
+                </div>
+                <div id="datosContacto" style="display: none; margin-top: 15px;">
+                    <input type="text" id="nombre" placeholder="Tu nombre">
+                    <input type="tel" id="telefono" placeholder="Número de teléfono (con código de área)" style="margin-top: 8px;">
+                </div>
+            </div>
+            <button type="submit" class="btn-submit">Enviar pregunta</button>
+        </form>
+        <div id="mensajeRespuesta" style="margin-top: 15px; text-align: center;"></div>
+    </div>
+</div>
+
+<script>
+    // URL del script de Apps Script (REEMPLAZAR CON LA TUYA)
+    const SCRIPT_URL = "https://script.google.com/macros/s/TU_URL_AQUI/exec";
+
+    // Cargar preguntas respondidas
+    async function cargarMuro() {
+        const container = document.getElementById('muroLista');
+        container.innerHTML = '<div class="loading">Cargando...</div>';
+        try {
+            const res = await fetch(SCRIPT_URL + "?action=get");
+            const preguntas = await res.json();
+            if (preguntas.length === 0) {
+                container.innerHTML = '<p style="text-align:center; padding:20px;">Todavía no hay preguntas respondidas. ¡Sé el primero en preguntar!</p>';
+                return;
+            }
+            let html = '';
+            preguntas.forEach(p => {
+                html += `
+                    <div class="pregunta-item">
+                        <div class="pregunta-texto">❓ ${escapeHtml(p.pregunta)}</div>
+                        <div class="pregunta-meta">${p.destinatario ? `Dirigida a: ${p.destinatario} · ` : ''}${p.nombrePregunto ? `Pregunta de: ${escapeHtml(p.nombrePregunto)} · ` : ''}${new Date(p.fecha).toLocaleDateString()}</div>
+                        <div class="respuesta">
+                            <div class="respuesta-texto">💬 ${escapeHtml(p.respuesta)}</div>
+                            <div class="respuesta-autor">— ${p.respondio}</div>
+                        </div>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        } catch (e) {
+            container.innerHTML = '<p style="color:red">Error al cargar. Intentalo de nuevo.</p>';
+            console.error(e);
+        }
+    }
+
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        }).replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, function(c) {
+            return c;
+        });
+    }
+
+    // Modal
+    const modal = document.getElementById('modalPregunta');
+    const btn = document.getElementById('btnNuevaPregunta');
+    const closeBtn = document.getElementById('closeModal');
+    btn.onclick = () => modal.style.display = 'flex';
+    closeBtn.onclick = () => modal.style.display = 'none';
+    window.onclick = (e) => { if (e.target === modal) modal.style.display = 'none'; };
+
+    // Mostrar/ocultar selector de destinatario específico
+    const tipoSelect = document.getElementById('destinatarioTipo');
+    const grupoDest = document.getElementById('grupoDestinatario');
+    tipoSelect.addEventListener('change', () => {
+        grupoDest.classList.toggle('hidden', tipoSelect.value !== 'especifico');
+    });
+
+    // Mostrar/ocultar contacto opcional
+    const contactoDiv = document.getElementById('contactoOpcional');
+    contactoDiv.style.display = 'block';
+    const radiosContacto = document.querySelectorAll('input[name="contacto"]');
+    const datosContacto = document.getElementById('datosContacto');
+    radiosContacto.forEach(r => {
+        r.addEventListener('change', () => {
+            datosContacto.style.display = (r.value === 'si') ? 'block' : 'none';
+        });
+    });
+
+    // Envío del formulario
+    const form = document.getElementById('formPregunta');
+    const mensajeResp = document.getElementById('mensajeRespuesta');
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        mensajeResp.innerHTML = '<p style="color:#D31224">Enviando...</p>';
+        
+        const pregunta = document.getElementById('pregunta').value.trim();
+        if (!pregunta) {
+            mensajeResp.innerHTML = '<p style="color:red">Escribí tu pregunta.</p>';
+            return;
+        }
+        let destinatario = '';
+        if (tipoSelect.value === 'especifico') {
+            destinatario = document.getElementById('destinatarioSelect').value;
+        } else {
+            destinatario = 'Lista FPT en general';
+        }
+        let nombre = '', telefono = '';
+        const contactoSi = document.querySelector('input[name="contacto"]:checked').value === 'si';
+        if (contactoSi) {
+            nombre = document.getElementById('nombre').value.trim();
+            telefono = document.getElementById('telefono').value.trim();
+            if (!nombre || !telefono) {
+                mensajeResp.innerHTML = '<p style="color:red">Completá nombre y teléfono para que te contactemos.</p>';
+                return;
+            }
+        }
+        
+        try {
+            const res = await fetch(SCRIPT_URL + "?action=post", {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ pregunta, destinatario, nombre, telefono })
+            });
+            const data = await res.json();
+            if (data.success) {
+                mensajeResp.innerHTML = '<p style="color:green">✅ Pregunta enviada. Pronto la responderemos.</p>';
+                form.reset();
+                // Cerrar modal después de 2 segundos
+                setTimeout(() => {
+                    modal.style.display = 'none';
+                    mensajeResp.innerHTML = '';
+                }, 2000);
+            } else {
+                mensajeResp.innerHTML = '<p style="color:red">Error al enviar. Intentalo de nuevo.</p>';
+            }
+        } catch (err) {
+            mensajeResp.innerHTML = '<p style="color:red">Error de conexión.</p>';
+            console.error(err);
+        }
+    });
+
+    // Cargar muro al inicio
+    cargarMuro();
+</script>
+</body>
+</html>
