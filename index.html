@@ -22,7 +22,6 @@
             margin: 0;
             overflow-x: hidden;
         }
-        /* Header compacto */
         .header {
             background: white;
             padding: 12px 20px 12px 20px;
@@ -36,13 +35,12 @@
             height: auto;
             margin-bottom: 4px;
         }
-        /* Contenedor del título con centrado perfecto y emoji ajustado */
         .titulo-wrapper {
             position: relative;
             display: flex;
             justify-content: center;
             margin: 0 auto;
-            padding: 0 32px; /* espacio para el emoji sin desborde */
+            padding: 0 32px;
         }
         .titulo-principal {
             text-align: center;
@@ -63,7 +61,7 @@
             letter-spacing: -0.5px;
             line-height: 1.2;
         }
-        /* Emoji posicionado absolutamente, más cerca del texto (right: 8px) */
+    /* Emoji posicionado absolutamente, más cerca del texto (right: 8px) */
         .emoji-lateral {
             position: absolute;
             right: 600px;
@@ -101,7 +99,6 @@
             padding-top: 6px;
         }
 
-        /* Contenedor principal */
         .container {
             max-width: 720px;
             margin: 0 auto;
@@ -135,7 +132,7 @@
             .whatsapp-float { padding: 8px 14px; }
         }
 
-        /* Botón principal hacer pregunta */
+        /* Botón principal */
         .btn-abrir-asistente {
             background: #D31224;
             color: white;
@@ -156,7 +153,7 @@
         }
         .btn-abrir-asistente:active { transform: scale(0.98); }
 
-        /* Muro */
+        /* MURO */
         .muro h2 {
             font-size: 1.2rem;
             font-weight: 700;
@@ -211,7 +208,8 @@
             padding: 5px 12px;
             border-radius: 30px;
         }
-        /* Respuesta con scroll si es muy larga */
+
+        /* ===== RESPUESTA CON BOTÓN CERRAR FIJO Y SCROLL ESTILIZADO ===== */
         .respuesta-container {
             display: block;
             max-height: 0;
@@ -225,6 +223,27 @@
             opacity: 1;
             overflow-y: auto;
         }
+        /* Estilo de la barra de scroll (más sutil y corta) */
+        .respuesta-container.visible::-webkit-scrollbar {
+            width: 4px;
+        }
+        .respuesta-container.visible::-webkit-scrollbar-track {
+            background: #F1F1F1;
+            border-radius: 10px;
+        }
+        .respuesta-container.visible::-webkit-scrollbar-thumb {
+            background: #CCC;
+            border-radius: 10px;
+        }
+        .respuesta-container.visible::-webkit-scrollbar-thumb:hover {
+            background: #AAA;
+        }
+        /* Para Firefox */
+        .respuesta-container.visible {
+            scrollbar-width: thin;
+            scrollbar-color: #CCC #F1F1F1;
+        }
+
         .respuesta {
             background: #FEF6F6;
             padding: 14px;
@@ -232,7 +251,34 @@
             border-left: 4px solid #D31224;
             position: relative;
         }
+        /* Botón cerrar (X) fijo dentro del área de respuesta */
+        .cerrar-respuesta {
+            position: sticky;
+            top: 0;
+            float: right;
+            background: white;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            color: #999;
+            margin-left: 12px;
+            margin-bottom: 6px;
+            padding: 0 4px;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1;
+        }
+        .cerrar-respuesta:hover {
+            background: #F0F0F0;
+            color: #D31224;
+        }
+        /* Aseguramos que el contenido de la respuesta no quede debajo del botón */
         .respuesta-texto {
+            clear: both;
             font-size: 0.85rem;
             line-height: 1.5;
             color: #4A2E2E;
@@ -244,23 +290,14 @@
             color: #D31224;
             text-align: right;
         }
-        .cerrar-respuesta {
-            position: absolute;
-            top: 8px;
-            right: 12px;
-            background: none;
-            border: none;
-            font-size: 1.2rem;
-            cursor: pointer;
-            color: #aaa;
-        }
+
         .loading {
             text-align: center;
             padding: 40px;
             color: #A66F6F;
         }
 
-        /* ASISTENTE MODAL - CORRECCIÓN: inputs no se salen */
+        /* ASISTENTE MODAL (corrección de inputs desbordados) */
         .asistente-overlay {
             position: fixed;
             top: 0;
@@ -291,7 +328,6 @@
             box-shadow: 0 20px 35px rgba(0,0,0,0.2);
             box-sizing: border-box;
         }
-        /* Forzar que todos los campos del formulario no se salgan */
         .asistente-card select,
         .asistente-card textarea,
         .asistente-card input {
@@ -382,7 +418,6 @@
 
 <div class="container">
     <button class="btn-abrir-asistente" id="abrirAsistente">➕ Hacer una pregunta</button>
-
     <div class="muro">
         <h2>📢 Preguntas respondidas</h2>
         <div id="muroLista"><div class="loading">Cargando preguntas...</div></div>
@@ -394,7 +429,7 @@
     <span>¿Preferís hablarnos directamente?</span>
 </a>
 
-<!-- ASISTENTE MODAL (mismo código funcional) -->
+<!-- ASISTENTE MODAL (código funcional sin cambios) -->
 <div id="asistenteModal" class="asistente-overlay">
     <div class="asistente-card">
         <span class="close-asistente" id="closeAsistente">&times;</span>
@@ -461,11 +496,9 @@
 </div>
 
 <script>
-    // ========== CONFIGURACIÓN ==========
-    // REEMPLAZA ESTA URL CON LA DE TU APPS SCRIPT
+    // ========== CONFIGURACIÓN (¡cambia la URL!) ==========
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzIuYDBkJIMEKJRstaeeDTtb8iQpxgcl1HmtoBISAwPkxnwyAr_LPPETGaxbi6de5iU/exec";
 
-    // ========== FUNCIÓN PARA FORMATEAR TEXTO (doble espacio = salto de párrafo) ==========
     function formatText(text) {
         if (!text) return "";
         text = text.replace(/\. /g, '.<br><br>');
@@ -474,7 +507,7 @@
         return text;
     }
 
-    // ========== ASISTENTE (paso a paso) ==========
+    // ========== ASISTENTE (mismo de siempre) ==========
     const modal = document.getElementById('asistenteModal');
     const abrirBtn = document.getElementById('abrirAsistente');
     const cerrarBtn = document.getElementById('closeAsistente');
@@ -583,7 +616,7 @@
     cerrarBtn.onclick = () => { modal.classList.remove('active'); reiniciarAsistente(); };
     modal.onclick = (e) => { if (e.target === modal) modal.classList.remove('active'); };
 
-    // ========== MURO CON RESPUESTAS OCULTAS Y FORMATO DE TEXTO ==========
+    // ========== MURO ==========
     function toggleRespuesta(idx, forceClose = false) {
         const respuestaDiv = document.getElementById(`respuesta-${idx}`);
         const btnVer = document.getElementById(`btnVer-${idx}`);
